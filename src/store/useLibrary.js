@@ -1,19 +1,22 @@
 import { create } from "zustand"
-import { config } from "dotenv"
 import axios from "axios"
 export const useLibrary = create((set)=>({
- Books:[],
- fetchBooks: async()=>{
-    try{
-        const response=await axios.get("https://api.bigbookapi.com/search-books",{
+    Books:"",
+    fetchBooks: async()=>{
+    try{ 
+        console.log("Everything Vite sees:", import.meta.env);
+        const response=await axios.get("https://api.linkpreview.net",{
+            headers:{
+                "X-Linkpreview-Api-Key":import.meta.env.VITE_API_KEY
+                
+            },
             params:{
-                "query":"books about wizard",
-                "api-key":"47e0c2f823cd47639a55e7f435bf973c"
+                "q":"https://google.com"
             }
         })
+        const bookData=response.data.description;
+        set({Books:bookData})
         console.log(response);
-        set({Books:response.data.books||[]})
-        
     }
     catch(e){
         console.log(e);
